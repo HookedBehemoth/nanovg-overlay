@@ -7,6 +7,11 @@
 #include <math.h>
 #include <switch.h>
 
+/* Shaders */
+#include "fill_aa_fsh_dksh.h"
+#include "fill_fsh_dksh.h"
+#include "fill_vsh_dksh.h"
+
 #define GLM_FORCE_DEFAULT_ALIGNED_GENTYPES /* Enforces GLSL std140/std430 alignment rules for glm types. */
 #define GLM_FORCE_INTRINSICS               /* Enables usage of SIMD CPU instructions (requiring the above as well). */
 #include <glm/vec2.hpp>
@@ -400,13 +405,13 @@ namespace nvg {
     }
 
     int DkRenderer::Create(DKNVGcontext &ctx) {
-        m_vertex_shader.load(m_code_mem_pool, "romfs:/shaders/fill_vsh.dksh");
+        m_vertex_shader.loadMem(m_code_mem_pool, fill_vsh_dksh, fill_vsh_dksh_size);
 
         /* Load the appropriate fragment shader depending on whether AA is enabled. */
         if (ctx.flags & NVG_ANTIALIAS) {
-            m_fragment_shader.load(m_code_mem_pool, "romfs:/shaders/fill_aa_fsh.dksh");
+            m_fragment_shader.loadMem(m_code_mem_pool, fill_aa_fsh_dksh, fill_aa_fsh_dksh_size);
         } else {
-            m_fragment_shader.load(m_code_mem_pool, "romfs:/shaders/fill_fsh.dksh");
+            m_fragment_shader.loadMem(m_code_mem_pool, fill_fsh_dksh, fill_fsh_dksh_size);
         }
 
         /* Set the size of fragment uniforms. */

@@ -1,5 +1,6 @@
 .vscode
 build
+*.dksh
 *.elf
 *.nacp
 *.ovl
